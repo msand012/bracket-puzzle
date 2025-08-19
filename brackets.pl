@@ -4,8 +4,9 @@ bracket(N,[X|Y]) :- bracket(N1,Y), X == "(",N is N1+1, N<1.
 bracket(N,[X|Y]) :- bracket(N1,Y), X == ")",N is N1-1.
 
 addBracket(1,[]):-!.
-addBracket(N,X) :- addOpenBracket(N1,[],X),addCloseBracket(N2,[],X), N is N1+N2.
+addBracket(N,X) :- addOpenBracket(N1,[],X),addCloseBracket(N2,[],X), N is N1+N2,!.
 
+addOpenBracket(N,X) :- addOpenBracket(N,[],X),!.
 addOpenBracket(0,_,[]).
 addOpenBracket(N,X,Y) :-
     append(X,["("|Y],Z),
@@ -21,8 +22,7 @@ addOpenBracket(N,X,Y) :-
     append(X,[Y1],X1),
     addOpenBracket(N,X1,Y2).
 
-
-
+addCloseBracket(N,X) :- addCloseBracket(N,[],X),!.
 addCloseBracket(1,X,[]) :- append(X,[")"],Y),bracket(Y).
 addCloseBracket(0,X,[]) :- append(X,[")"],Y),\+ bracket(Y).
 addCloseBracket(N,X,Y) :-
@@ -40,7 +40,7 @@ addCloseBracket(N,X,Y) :-
     addCloseBracket(N,X1,Y2).
 
 removeBracket(1,[]) :- !.
-removeBracket(N,X) :- removeBracket(N,[],X).
+removeBracket(N,X) :- removeBracket(N,[],X),!.
 removeBracket(0,_,[]).
 removeBracket(N,X,[Y1|Y]) :-
     append(X,Y,Z),
